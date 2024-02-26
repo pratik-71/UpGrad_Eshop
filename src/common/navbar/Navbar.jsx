@@ -13,8 +13,12 @@ import MenuItem from "@mui/material/MenuItem";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
+import { Link } from "@mui/material";
 
-const pages = ["Log In", "Sign Up"];
+const pages = [
+{name:"Log In",link:"sign_in"},
+{name:"Sign Up",link:"sign_up"}
+];
 const loggedIn = [
   {
     id: 1,
@@ -69,7 +73,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar = (props) => {
   const [navlinks, setNavLinks] = React.useState(pages);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -179,8 +183,8 @@ const Navbar = (props) => {
                 )}
 
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                  <MenuItem key={page} onClick={handleCloseNavMenu} href={page.link}>
+                    <Typography textAlign="center">{page.name}</Typography>
                   </MenuItem>
                 ))}
 
@@ -247,9 +251,10 @@ const Navbar = (props) => {
                       Add Products
                     </Button>
                   )}
-
+                 
                   <Button
                     onClick={handleCloseNavMenu}
+                    href="/Sign_out"
                     sx={{
                       my: 2,
                       mx: 1,
@@ -261,11 +266,14 @@ const Navbar = (props) => {
                   >
                     Log Out
                   </Button>
+                  
                 </>
               ) : (
                 navlinks.map((page) => (
-                  <Button
-                    key={page}
+               
+                     <Button
+                     href={page.link}
+                    key={page.name}
                     onClick={handleCloseNavMenu}
                     sx={{
                       my: 2,
@@ -276,8 +284,10 @@ const Navbar = (props) => {
                     }}
                     variant="outlined"
                   >
-                    {page}
+                    {page.name}
                   </Button>
+                 
+    
                 ))
               )}
             </Box>

@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -12,17 +10,22 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useForm } from "react-hook-form";
 
 const defaultTheme = createTheme();
 
 export default function Sign_up() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm();
+
+  const password = watch("Password");
+
+  const send_data = (formData) => {
+    console.log(formData);
   };
 
   return (
@@ -32,7 +35,7 @@ export default function Sign_up() {
         <Box
           sx={{
             marginTop: 8,
-            my:2,
+            my: 2,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -46,8 +49,8 @@ export default function Sign_up() {
           </Typography>
           <Box
             component="form"
+            onSubmit={handleSubmit(send_data)}
             noValidate
-            onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -57,60 +60,94 @@ export default function Sign_up() {
                   name="firstName"
                   required
                   fullWidth
-                  id="firstName"
                   label="First Name"
                   autoFocus
+                  {...register("firstName", {
+                    required: "First Name is required",
+                  })}
+                  error={!!errors?.firstName}
+                  helperText={errors?.firstName && errors.firstName.message}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
                   label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  {...register("lastName", {
+                    required: "Last Name is required",
+                  })}
+                  error={!!errors?.lastName}
+                  helperText={errors?.lastName && errors.lastName.message}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
-                  fullWidth
-                  name="contactNumber"
-                  label="Contact Number"
                   type="number"
-                  id="contactNumber"
+                  required
+                  fullWidth
+                  label="Phone Number"
+                  {...register("PhoneNumber", {
+                    required: "Phone Number is required",
+                    minLength: {
+                      value: 10,
+                      message:
+                        "Phone Number must be at least 10 characters long",
+                    },
+                    maxLength: {
+                      value: 10,
+                      message:
+                        "Phone Number must be exactly 10 characters long",
+                    },
+                  })}
+                  error={!!errors?.PhoneNumber}
+                  helperText={errors?.PhoneNumber && errors.PhoneNumber.message}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  type="email"
+                  required
+                  fullWidth
+                  label="Email"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^\S+@\S+$/i,
+                      message: "Invalid email format",
+                    },
+                  })}
+                  error={!!errors?.email}
+                  helperText={errors?.email && errors.email.message}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
                   label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
+                  {...register("Password", {
+                    required: "Password is required",
+                  })}
+                  error={!!errors?.Password}
+                  helperText={errors?.Password && errors.Password.message}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="ConfirmPassword"
                   label="Confirm Password"
-                  type="password"
-                  id="Confirm password"
+                  {...register("ConfirmPassword", {
+                    required: "Confirm Password is required",
+                    validate: (value) =>
+                      value === password ||
+                      "Confirm password should be same as Password",
+                  })}
+                  error={!!errors?.ConfirmPassword}
+                  helperText={
+                    errors?.ConfirmPassword && errors.ConfirmPassword.message
+                  }
                 />
               </Grid>
             </Grid>
@@ -122,14 +159,14 @@ export default function Sign_up() {
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="#" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
       </Container>
     </ThemeProvider>

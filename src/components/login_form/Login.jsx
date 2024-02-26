@@ -12,20 +12,25 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useForm } from 'react-hook-form';
 
 
 
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
+
+
+  const send_data = (e) => {
+    
+  }
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -45,26 +50,35 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form"  onSubmit={handleSubmit(send_data)} noValidate sx={{ mt: 1 }}>
+          <TextField
+                  type="email"
+                  required
+                  fullWidth
+                  label="Email"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^\S+@\S+$/i,
+                      message: "Invalid email format",
+                    },
+                  })}
+                  error={!!errors?.email}
+                  helperText={errors?.email && errors.email.message}
+                />
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
+            type="password"
               margin="normal"
               required
               fullWidth
               name="password"
               label="Password"
-              type="password"
-              id="password"
               autoComplete="current-password"
+              {...register("password", {
+                required: "password is required",
+              })}
+              error={!!errors?.password}
+              helperText={errors?.password && errors.password.message}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

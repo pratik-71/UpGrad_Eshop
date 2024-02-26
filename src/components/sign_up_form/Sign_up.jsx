@@ -25,7 +25,30 @@ export default function Sign_up() {
   const password = watch("Password");
 
   const send_data = (formData) => {
-    console.log(formData);
+
+    console.log("Form Data Object:", formData);
+
+    fetch('http://localhost:3001/api/v1/users', { // Remove the extra double quote here
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    
+    body: JSON.stringify({
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      contactNumber: formData.PhoneNumber,
+      email: formData.email,
+      password: formData.Password 
+    }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Handle response data as needed
+    })
+    .catch(error => {
+      console.log(error);
+    });
   };
 
   return (

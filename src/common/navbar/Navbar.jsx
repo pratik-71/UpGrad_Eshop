@@ -16,8 +16,8 @@ import InputBase from "@mui/material/InputBase";
 import { useSelector } from "react-redux";
 
 const pages = [
-{name:"Log In",link:"sign_in"},
-{name:"Sign Up",link:"sign_up"}
+{id:1,name:"Log In",link:"sign_in"},
+{id:2,name:"Sign Up",link:"sign_up"}
 ];
 
 
@@ -69,6 +69,7 @@ const Navbar = (props) => {
   const [navlinks, setNavLinks] = React.useState(pages);
   const [isAdmin, setIsAdmin] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+
 
 
    const isAuthenticated = useSelector((state)=>state.auth.isAuthenticated)
@@ -178,7 +179,7 @@ const Navbar = (props) => {
                 )}
 
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu} href={page.link}>
+                  <MenuItem key={page.id} onClick={handleCloseNavMenu} href={page.link}>
                     <Typography textAlign="center">{page.name}</Typography>
                   </MenuItem>
                 ))}

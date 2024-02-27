@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { setisAuthenticated } from '../../redux/reducer_functions/AuthSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -26,6 +27,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = React.useState("");
   const { register,handleSubmit,formState: { errors }} = useForm();
+  const navigate = useNavigate();
 
 
 
@@ -57,6 +59,7 @@ export default function Login() {
       const responsedata = await response.json();
     if (responsedata.isAuthenticated) {
       dispatch(setisAuthenticated(true))
+      navigate('/')
     } else {
       console.log("User is not authenticated");
     }

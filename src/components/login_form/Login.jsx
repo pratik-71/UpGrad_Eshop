@@ -20,6 +20,8 @@ const defaultTheme = createTheme();
 
 export default function Login() {
 
+  const [errorMessage, setErrorMessage] = React.useState("");
+
   const {
     register,
     handleSubmit,
@@ -27,8 +29,43 @@ export default function Login() {
   } = useForm();
 
 
-  const send_data = (e) => {
+  const send_data = async(formData) => {
     
+    try {
+      const response = await fetch("http://localhost:3001/api/v1/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        setErrorMessage(errorMessage);
+
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 4000);
+        return;
+      }
+
+      const responseData = await response.json();
+
+    if (responseData.isAuthenticated) {
+      
+    } else {
+      console.log("User is not authenticated");
+    }
+
+
+    } catch (error) {
+      console.log(error);
+      setErrorMessage("An error occurred. Please try again later.");
+    }
   }
 
 
@@ -99,13 +136,16 @@ export default function Login() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/Sign_up" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
+        <p style={{ fontSize: "14px", color: "red", textAlign: "center" }}>
+          {errorMessage}
+        </p>
       </Container>
     </ThemeProvider>
   );

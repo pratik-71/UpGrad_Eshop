@@ -15,6 +15,7 @@ const Products_Page = () => {
 
 
   const [value, setValue] = React.useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.products.categories);
 
@@ -44,7 +45,7 @@ const Products_Page = () => {
 
 
   const get_product = async(event, newValue) => {
-    setValue(newValue);
+
     const response = await fetch(
       `http://localhost:3001/api/v1/products`,
       {
@@ -65,6 +66,7 @@ const Products_Page = () => {
 
   const handleChange = async (event, newValue) => {
     setValue(newValue);
+    setSelectedCategory(categories[newValue])
   }
 
   return (
@@ -92,7 +94,7 @@ const Products_Page = () => {
         </Tabs>
       </Box>
 
-        <Product_card/>
+        <Product_card selectedCategory={selectedCategory}/>
      
     </>
   );

@@ -15,17 +15,14 @@ import { useForm } from "react-hook-form";
 const defaultTheme = createTheme();
 
 export default function Sign_up() {
+  
+
   const [errorMessage, setErrorMessage] = React.useState("");
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm();
-
+  const { register, handleSubmit, formState: { errors },watch} = useForm();
   const password = watch("Password");
 
+
+  // ------------------------------- fetch request for Sign Up starts ---------------------------------
   const send_data = async (formData) => {
     console.log("Form Data Object:", formData);
 
@@ -58,8 +55,13 @@ export default function Sign_up() {
       setErrorMessage("An error occurred. Please try again later.");
     }
   };
+// ---------------------------------- fetch request for Sign Up ends ----------------------------
+
+
 
   return (
+
+
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -78,12 +80,17 @@ export default function Sign_up() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+
+            {/* --------------------------- sign up form starts ----------------------------- */}
+
+
           <Box
             component="form"
             onSubmit={handleSubmit(send_data)}
             noValidate
             sx={{ mt: 3 }}
           >
+                                             {/* firstname */}
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -104,6 +111,7 @@ export default function Sign_up() {
                   helperText={errors?.firstName && errors.firstName.message}
                 />
               </Grid>
+                                     {/* lastname */}
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
@@ -120,6 +128,8 @@ export default function Sign_up() {
                   helperText={errors?.lastName && errors.lastName.message}
                 />
               </Grid>
+
+                                            {/* Phone Number */}
               <Grid item xs={12}>
                 <TextField
                   type="number"
@@ -149,6 +159,8 @@ export default function Sign_up() {
                   helperText={errors?.PhoneNumber && errors.PhoneNumber.message}
                 />
               </Grid>
+                              
+                                        {/* Email */} 
               <Grid item xs={12}>
                 <TextField
                   type="email"
@@ -166,6 +178,8 @@ export default function Sign_up() {
                   helperText={errors?.email && errors.email.message}
                 />
               </Grid>
+
+                                   {/* password */}
               <Grid item xs={12}>
                 <TextField
                   required
@@ -182,6 +196,8 @@ export default function Sign_up() {
                   helperText={errors?.Password && errors.Password.message}
                 />
               </Grid>
+
+                                               {/* Confirm Password */}
               <Grid item xs={12}>
                 <TextField
                   required
@@ -200,6 +216,8 @@ export default function Sign_up() {
                 />
               </Grid>
             </Grid>
+
+                                            {/* Sign up Button */}
             <Button
               type="submit"
               fullWidth
@@ -217,10 +235,16 @@ export default function Sign_up() {
             </Grid>
           </Grid>
         </Box>
+
+          {/* --------------------------- sign up form ends ----------------------------- */}
+
+
         <p style={{ fontSize: "14px", color: "red", textAlign: "center" }}>
           {errorMessage}
         </p>
       </Container>
     </ThemeProvider>
+
+
   );
 }

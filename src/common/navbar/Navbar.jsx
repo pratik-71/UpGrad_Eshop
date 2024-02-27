@@ -13,18 +13,11 @@ import MenuItem from "@mui/material/MenuItem";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
-import { Link } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const pages = [
 {name:"Log In",link:"sign_in"},
 {name:"Sign Up",link:"sign_up"}
-];
-const loggedIn = [
-  {
-    id: 1,
-    name: "HOME",
-    link: "#",
-  },
 ];
 
 
@@ -72,11 +65,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 const Navbar = (props) => {
+
   const [navlinks, setNavLinks] = React.useState(pages);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+
+   const isAuthenticated = useSelector((state)=>state.auth.isAuthenticated)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -169,7 +164,7 @@ const Navbar = (props) => {
               <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
             </Search>
                 
-                 {isLoggedIn && (
+                 {isAuthenticated && (
                   <>
                     <MenuItem onClick={handleCloseNavMenu}>
                       <Typography textAlign="center">Home</Typography>
@@ -221,7 +216,7 @@ const Navbar = (props) => {
                 display: { xs: "none", md: "flex", justifyContent: "flex-end" },
               }}
             >
-              {isLoggedIn ? (
+              {isAuthenticated ? (
                 <>
                   <Button
                     onClick={handleCloseNavMenu}

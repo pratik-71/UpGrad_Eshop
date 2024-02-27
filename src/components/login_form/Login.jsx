@@ -13,6 +13,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { setisAuthenticated } from '../../redux/reducer_functions/AuthSlice';
+
 
 
 
@@ -20,15 +23,13 @@ const defaultTheme = createTheme();
 
 export default function Login() {
 
+  const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = React.useState("");
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm();
+  const { register,handleSubmit,formState: { errors }} = useForm();
 
 
+
+  // ------------------------------- fetch request for Sign in starts --------------------------------
   const send_data = async(formData) => {
     
     try {
@@ -53,10 +54,9 @@ export default function Login() {
         return;
       }
 
-      const responseData = await response.json();
-
-    if (responseData.isAuthenticated) {
-      
+      const responsedata = await response.json();
+    if (responsedata.isAuthenticated) {
+      dispatch(setisAuthenticated(true))
     } else {
       console.log("User is not authenticated");
     }
@@ -67,6 +67,9 @@ export default function Login() {
       setErrorMessage("An error occurred. Please try again later.");
     }
   }
+
+  // ------------------------------- fetch request for Sign Up ends --------------------------------
+
 
 
   return (
@@ -87,7 +90,14 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+
+          {/* --------------------------- Sign In form starts -------------------------------*/}
+
+
           <Box component="form"  onSubmit={handleSubmit(send_data)} noValidate sx={{ mt: 1 }}>
+
+                                {/* Email */}
+
           <TextField
                   type="email"
                   required
@@ -103,6 +113,9 @@ export default function Login() {
                   error={!!errors?.email}
                   helperText={errors?.email && errors.email.message}
                 />
+
+                                      {/* password */}
+
             <TextField
             type="password"
               margin="normal"
@@ -121,6 +134,9 @@ export default function Login() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
+
+                                    {/* Sign in button */}
+
             <Button
               type="submit"
               fullWidth
@@ -142,6 +158,10 @@ export default function Login() {
               </Grid>
             </Grid>
           </Box>
+
+          {/* --------------------------- Sign In form ends -------------------------------*/}
+
+
         </Box>
         <p style={{ fontSize: "14px", color: "red", textAlign: "center" }}>
           {errorMessage}

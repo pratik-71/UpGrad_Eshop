@@ -15,6 +15,8 @@ import { useForm } from "react-hook-form";
 const defaultTheme = createTheme();
 
 export default function Sign_up() {
+  const [errorMessage, setErrorMessage] = React.useState("");
+
   const {
     register,
     handleSubmit,
@@ -24,31 +26,37 @@ export default function Sign_up() {
 
   const password = watch("Password");
 
-  const send_data = (formData) => {
-
+  const send_data = async (formData) => {
     console.log("Form Data Object:", formData);
 
-    fetch('http://localhost:3001/api/v1/users', { // Remove the extra double quote here
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    
-    body: JSON.stringify({
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      contactNumber: formData.PhoneNumber,
-      email: formData.email,
-      password: formData.Password 
-    }),
-  })
-    .then(response => response.json())
-    .then(data => {
-      // Handle response data as needed
-    })
-    .catch(error => {
+    try {
+      const response = await fetch("http://localhost:3001/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          contactNumber: formData.PhoneNumber,
+          email: formData.email,
+          password: formData.Password,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        setErrorMessage(errorMessage);
+
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 4000);
+        return;
+      }
+    } catch (error) {
       console.log(error);
-    });
+      setErrorMessage("An error occurred. Please try again later.");
+    }
   };
 
   return (
@@ -87,6 +95,10 @@ export default function Sign_up() {
                   autoFocus
                   {...register("firstName", {
                     required: "First Name is required",
+                    minLength: {
+                      value: 5,
+                      message: "First Name must be at least 5 characters long",
+                    },
                   })}
                   error={!!errors?.firstName}
                   helperText={errors?.firstName && errors.firstName.message}
@@ -99,6 +111,10 @@ export default function Sign_up() {
                   label="Last Name"
                   {...register("lastName", {
                     required: "Last Name is required",
+                    minLength: {
+                      value: 5,
+                      message: "Last Name must be at least 5 characters long",
+                    },
                   })}
                   error={!!errors?.lastName}
                   helperText={errors?.lastName && errors.lastName.message}
@@ -114,13 +130,19 @@ export default function Sign_up() {
                     required: "Phone Number is required",
                     minLength: {
                       value: 10,
-                      message:
-                        "Phone Number must be at least 10 characters long",
+                      message: "Phone Number must be at least 10 digits long",
                     },
                     maxLength: {
                       value: 10,
-                      message:
-                        "Phone Number must be exactly 10 characters long",
+                      message: "Phone Number must be exactly 10 digits long",
+                    },
+                    min: {
+                      value: 1000000000,
+                      message: "Phone Number must be at least 10 digits long",
+                    },
+                    max: {
+                      value: 9999999999,
+                      message: "Phone Number must not exceed 10 digits",
                     },
                   })}
                   error={!!errors?.PhoneNumber}
@@ -151,6 +173,10 @@ export default function Sign_up() {
                   label="Password"
                   {...register("Password", {
                     required: "Password is required",
+                    minLength: {
+                      value: 5,
+                      message: "Password must be at least 5 characters long",
+                    },
                   })}
                   error={!!errors?.Password}
                   helperText={errors?.Password && errors.Password.message}
@@ -191,6 +217,9 @@ export default function Sign_up() {
             </Grid>
           </Grid>
         </Box>
+        <p style={{ fontSize: "14px", color: "red", textAlign: "center" }}>
+          {errorMessage}
+        </p>
       </Container>
     </ThemeProvider>
   );

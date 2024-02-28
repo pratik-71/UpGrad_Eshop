@@ -84,7 +84,7 @@ const Navbar = (props) => {
 
   return (
     <>
-      <AppBar position="static">
+<AppBar position="static" style={{ zIndex: 100 }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <ShoppingCartIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />

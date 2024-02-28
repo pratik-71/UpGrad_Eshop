@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
-import { CategoryRounded } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setCategories, setProducts } from "../../redux/reducer_functions/ProductSlice";
+import {
+  setCategories,
+  setProducts,
+} from "../../redux/reducer_functions/ProductSlice";
 import Product_card from "./Product_card";
+import Drawer_filter from "./Drawer_filter";
 
 const Products_Page = () => {
   useEffect(() => {
@@ -13,8 +16,7 @@ const Products_Page = () => {
     get_product();
   }, []);
 
-
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("");
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.products.categories);
@@ -43,31 +45,25 @@ const Products_Page = () => {
     }
   };
 
-
-  const get_product = async(event, newValue) => {
-
-    const response = await fetch(
-      `http://localhost:3001/api/v1/products`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+  const get_product = async () => {
+    const response = await fetch(`http://localhost:3001/api/v1/products`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     if (!response.ok) {
       console.log("Data not found");
       return;
     }
     const data = await response.json();
-    dispatch(setProducts(data))
+    dispatch(setProducts(data));
   };
 
-
-  const handleChange = async (event, newValue) => {
+  const handleChange = (event, newValue) => {
     setValue(newValue);
-    setSelectedCategory(categories[newValue])
-  }
+    setSelectedCategory(categories[newValue]);
+  };
 
   return (
     <>
@@ -78,8 +74,11 @@ const Products_Page = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          position: "relative",
+          zIndex: 1,
         }}
       >
+        <Drawer_filter/>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -87,15 +86,13 @@ const Products_Page = () => {
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
         >
-           {
-           categories.map((category, index) => (
+          {categories.map((category, index) => (
             <Tab key={index} label={category} />
           ))}
         </Tabs>
       </Box>
 
-        <Product_card selectedCategory={selectedCategory}/>
-     
+      <Product_card/>
     </>
   );
 };

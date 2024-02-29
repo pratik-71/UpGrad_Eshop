@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { setisAuthenticated } from '../../redux/reducer_functions/AuthSlice';
+import { setisAdmin, setisAuthenticated } from '../../redux/reducer_functions/AuthSlice';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -57,7 +57,13 @@ export default function Login() {
       }
 
       const responsedata = await response.json();
+      console.log("hello")
     if (responsedata.isAuthenticated) {
+      const token = response.headers.get("X-Auth-Token")
+      localStorage.setItem('Auth-Token',token)
+      if(token.endsWith("1@3456Qw-")){
+        dispatch(setisAdmin(true))
+      }
       dispatch(setisAuthenticated(true))
       navigate('/')
     } else {

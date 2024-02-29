@@ -9,14 +9,15 @@ import {
 } from "../../redux/reducer_functions/ProductSlice";
 import Product_card from "./Product_card";
 import Drawer_filter from "./Drawer_filter";
+import { Divider, Grid } from "@mui/material";
 
 const Products_Page = () => {
   useEffect(() => {
     fetchData();
-    get_product();
+    handleChange();
   }, []);
 
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.products.categories);
@@ -45,20 +46,6 @@ const Products_Page = () => {
     }
   };
 
-  const get_product = async () => {
-    const response = await fetch(`http://localhost:3001/api/v1/products`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      console.log("Data not found");
-      return;
-    }
-    const data = await response.json();
-    dispatch(setProducts(data));
-  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -78,7 +65,6 @@ const Products_Page = () => {
           zIndex: 1,
         }}
       >
-        <Drawer_filter/>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -90,9 +76,21 @@ const Products_Page = () => {
             <Tab key={index} label={category} />
           ))}
         </Tabs>
+     
       </Box>
+     
+      <Divider />
 
-      <Product_card/>
+     <Grid container spacing={2}>
+          <Grid xs={2}>
+              <Drawer_filter/>
+            
+          </Grid>
+            <Divider orientation="vertical" flexItem />
+          <Grid>
+          <Product_card selectedCategory={selectedCategory}/>
+          </Grid>
+     </Grid>
     </>
   );
 };

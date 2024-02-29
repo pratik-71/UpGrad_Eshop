@@ -1,133 +1,117 @@
-import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import CssBaseline from '@mui/material/CssBaseline';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { Checkbox, Container, Divider, FormControlLabel, FormGroup, Grid } from "@mui/material";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setPricefilterProduct, setTimeFilterProduct } from "../../redux/reducer_functions/ProductSlice";
 
-const drawerWidth = 240;
+const Drawer_filter = () => {
+  const dispatch = useDispatch()
+  const [selectedPriceOption, setSelectedPriceOption] = useState(null);
+  const [selectAvailability,setSelectedAvailability] = useState(null);
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginRight: -drawerWidth,
-    ...(open && {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginRight: 0,
-    }),
-    position: 'relative',
-  }),
-);
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-start',
-}));
-
-export default function Drawer_filter() {
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const handlePriceCheckboxChange = (option) => {
+    setSelectedPriceOption(option);
+    if(option=="LowToHigh"){
+        dispatch(setPricefilterProduct("LowToHigh"))
+    }
+    if(option=="HighToLow"){
+      dispatch(setPricefilterProduct("HighToLow"))
+    }
+    if(option==="Default"){
+      dispatch(setPricefilterProduct("Default"))
+    }
   };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleArrivalCheckboxChange = (option) => {
+    setSelectedAvailability(option);
+    if(option==="Newest"){
+      dispatch(setTimeFilterProduct("Newest"))
+    }
+    if(option==="Old Stock"){
+      dispatch(setTimeFilterProduct("Old"))
+    }
+    if(option==="All Time"){
+      dispatch(setTimeFilterProduct("All Time"))
+    }
   };
 
   return (
-    <>
-    <Box sx={{ display: 'flex' }}>
-      
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerOpen}
-            sx={{ ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-  
-      
-      <Main open={open} >
-        <DrawerHeader />
-      </Main>
-    
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
+    <Container style={{ marginTop: '20px' }}>
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
       >
-        
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-       
-     
-    </Box>
-    </>
+        <Grid sx={{marginBottom:"20px"}}>
+          <h3>Filter Products</h3>
+          <Divider sx={{marginTop:"8px"}}/>
+        </Grid>
+        <Grid sx={{marginTop:"20px"}}>
+          <h5>Price</h5>
+          <FormGroup>
+          <FormControlLabel
+              control={
+                <Checkbox
+                  checked={selectedPriceOption === "Default"}
+                  onChange={() => handlePriceCheckboxChange("Default")}
+                />
+              }
+              label="Default"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={selectedPriceOption === "LowToHigh"}
+                  onChange={() => handlePriceCheckboxChange("LowToHigh")}
+                />
+              }
+              label="Low to High"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={selectedPriceOption === "HighToLow"}
+                  onChange={() => handlePriceCheckboxChange("HighToLow")}
+                />
+              }
+              label="High to Low"
+            />
+          </FormGroup>
+        </Grid>
+        <Grid sx={{marginTop:"20px"}}>
+          <h5>Availability</h5>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={selectAvailability === "Newest"}
+                  onChange={() => handleArrivalCheckboxChange("Newest")}
+                />
+              }
+              label="New Arrivals"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={selectAvailability === "Old"}
+                  onChange={() => handleArrivalCheckboxChange("Old")}
+                />
+              }
+              label="Old Stock"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={selectAvailability === "All Time"}
+                  onChange={() => handleArrivalCheckboxChange("All Time")}
+                />
+              }
+              label="All Time"
+            />
+          </FormGroup>
+        </Grid>
+      </Grid>
+    </Container>
   );
-}
+};
+
+export default Drawer_filter;

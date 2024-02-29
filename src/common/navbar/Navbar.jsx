@@ -67,12 +67,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar = (props) => {
 
   const [navlinks, setNavLinks] = React.useState(pages);
-  const [isAdmin, setIsAdmin] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
 
 
    const isAuthenticated = useSelector((state)=>state.auth.isAuthenticated)
+   const isAdmin = useSelector((state)=>state.auth.isAdmin)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -86,7 +86,7 @@ const Navbar = (props) => {
     <>
 <AppBar position="static" style={{ zIndex: 100 }}>
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
+          <Toolbar disableGutters style={{zIndex:100}}>
             <ShoppingCartIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
             <Typography
               variant="h6"

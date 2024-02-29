@@ -4,6 +4,7 @@ import Login from "./components/login_form/Login";
 import Sign_up from "./components/sign_up_form/Sign_up";
 import Products_Page from "./components/products/Products_Page";
 import { useSelector } from "react-redux";
+import Product_details from "./components/product_info/Product_details";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
      <Route path="/" element={isAuthenticated ? <Products_Page /> : <Navigate to="/sign_in" />} />
       <Route path="/sign_in" element={<Login/>}></Route>
       <Route path="/sign_up" element={<Sign_up/>}></Route>
+      <Route path="/Product_details/:id" element={<Product_details/>}></Route>
      </Routes>
      </BrowserRouter>
      </>

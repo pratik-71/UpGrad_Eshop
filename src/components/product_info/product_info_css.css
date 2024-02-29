@@ -1,0 +1,11 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.image_holder{
+    height: 10vh;
+    max-height: auto;
+    width: 300px;
+    max-width: auto;
+}

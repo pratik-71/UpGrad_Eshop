@@ -17,23 +17,16 @@ import { useDispatch } from 'react-redux';
 import { setisAdmin, setisAuthenticated } from '../../redux/reducer_functions/AuthSlice';
 import { useNavigate } from 'react-router-dom';
 
-
-
-
 const defaultTheme = createTheme();
 
 export default function Login() {
 
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = React.useState("");
-  const { register,handleSubmit,formState: { errors }} = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
 
-
-
-  // ------------------------------- fetch request for Sign in starts --------------------------------
-  const send_data = async(formData) => {
-    
+  const send_data = async (formData) => {
     try {
       const response = await fetch("http://localhost:3001/api/v1/auth", {
         method: "POST",
@@ -49,7 +42,6 @@ export default function Login() {
       if (!response.ok) {
         const errorMessage = await response.text();
         setErrorMessage(errorMessage);
-
         setTimeout(() => {
           setErrorMessage("");
         }, 4000);
@@ -57,29 +49,22 @@ export default function Login() {
       }
 
       const responsedata = await response.json();
-      console.log("hello")
-    if (responsedata.isAuthenticated) {
-      const token = response.headers.get("X-Auth-Token")
-      localStorage.setItem('Auth-Token',token)
-      if(token.endsWith("1@3456Qw-")){
-        dispatch(setisAdmin(true))
+      if (responsedata.isAuthenticated) {
+        const token = response.headers.get("X-Auth-Token");
+        localStorage.setItem('Auth-Token', token);
+        if (token.endsWith("1@3456Qw-")) {
+          dispatch(setisAdmin(true));
+        }
+        dispatch(setisAuthenticated(true));
+        navigate('/');
+      } else {
+        console.log("User is not authenticated");
       }
-      dispatch(setisAuthenticated(true))
-      navigate('/')
-    } else {
-      console.log("User is not authenticated");
-    }
-
-
     } catch (error) {
       console.log(error);
       setErrorMessage("An error occurred. Please try again later.");
     }
   }
-
-  // ------------------------------- fetch request for Sign Up ends --------------------------------
-
-
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -99,34 +84,24 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-
-          {/* --------------------------- Sign In form starts -------------------------------*/}
-
-
-          <Box component="form"  onSubmit={handleSubmit(send_data)} noValidate sx={{ mt: 1 }}>
-
-                                {/* Email */}
-
-          <TextField
-                  type="email"
-                  required
-                  fullWidth
-                  label="Email"
-                  {...register("email", {
-                    required: "Email is required",
-                    pattern: {
-                      value: /^\S+@\S+$/i,
-                      message: "Invalid email format",
-                    },
-                  })}
-                  error={!!errors?.email}
-                  helperText={errors?.email && errors.email.message}
-                />
-
-                                      {/* password */}
-
+          <Box component="form" onSubmit={handleSubmit(send_data)} noValidate sx={{ mt: 1 }}>
             <TextField
-            type="password"
+              type="email"
+              required
+              fullWidth
+              label="Email"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: "Invalid email format",
+                },
+              })}
+              error={!!errors?.email}
+              helperText={errors?.email && errors.email.message}
+            />
+            <TextField
+              type="password"
               margin="normal"
               required
               fullWidth
@@ -139,13 +114,6 @@ export default function Login() {
               error={!!errors?.password}
               helperText={errors?.password && errors.password.message}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-
-                                    {/* Sign in button */}
-
             <Button
               type="submit"
               fullWidth
@@ -154,23 +122,15 @@ export default function Login() {
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+            <Grid container justifyContent="center">
               <Grid item>
-                <Link href="/Sign_up" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/Sign_up" variant="body2" style={{ color: 'black' }}>
+                  <Typography variant="body2" style={{ display: 'inline', color: 'black' }}>{"Don't have an account? "}</Typography>
+                  <Typography variant="body2" style={{ display: 'inline', color: 'blue' }}>Sign Up</Typography>
                 </Link>
               </Grid>
             </Grid>
           </Box>
-
-          {/* --------------------------- Sign In form ends -------------------------------*/}
-
-
         </Box>
         <p style={{ fontSize: "14px", color: "red", textAlign: "center" }}>
           {errorMessage}

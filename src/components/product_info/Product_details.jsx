@@ -1,12 +1,16 @@
-import { Container, Grid, Typography, TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../product_info/product_info_css.css";
+import Categories from "../products/Categories";
+import { Container, Grid, Typography, TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+
+
 
 const Product_details = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -37,31 +41,38 @@ const Product_details = () => {
   const handleQuantityChange = (event) => {
     setQuantity(event.target.value);
   };
-
+  
+  const handleclick = () => {
+    navigate("/");
+    console.log("clocked")
+  };
 
   const handleBuyNow = () => {
-
     console.log(`Buying ${quantity} ${product?.name}(s)`);
   };
 
   return (
     <>
-      <Container>
-        <Typography variant="h4" align="center" className="product-name" style={{ marginTop: '20px' }}>
+    <Categories/>
+ 
+
+      <div style={{margin:"20px"}}>
+      <Typography variant="h4" align="center" className="product-name" style={{ marginTop: '20px' }}>
           {product?.name}
         </Typography>
         <Grid
+          sx={{marginTop:"5px"}}
           container
           align="center"
           spacing={4}
           className="product-details-container"
         >
-          <Grid item xs={12} sm={6} md={6}>
+          <Grid item xs={12} sm={6} md={5}>
             <img
               src={product?.imageURL}
               alt={product?.name}
               className="product-image"
-              style={{ height: "500px", width: "500px", boxShadow: '4px 4px 8px grey' }}
+              style={{ height: "450px", width: "500px", boxShadow: '4px 4px 8px grey' }}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
@@ -95,20 +106,20 @@ const Product_details = () => {
             <div style={{ marginTop: '20px' }}>
               <TextField
                 type="number"
-                label="Qty"
+                label="Quantity"
                 variant="outlined"
                 value={quantity}
                 onChange={handleQuantityChange}
                 inputProps={{ min: 1 }}
-                style={{ width: '100px', marginRight: '20px' }}
+                style={{ width: '150px', marginRight: '20px' }}
               />
               <Button variant="contained" color="primary" onClick={handleBuyNow}>
-                BUY NOW
+                Place Order
               </Button>
             </div>
           </Grid>
         </Grid>
-      </Container>
+      </div>
     </>
   );
 };

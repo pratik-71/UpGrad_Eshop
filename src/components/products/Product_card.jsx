@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../../redux/reducer_functions/ProductSlice";
 import { Link } from "react-router-dom";
 
-const Product_card = ({ selectedCategory }) => {
+const Product_card = () => {
    
   const dispatch = useDispatch()
    
@@ -35,10 +35,17 @@ const Product_card = ({ selectedCategory }) => {
   };
 
   const product_data = useSelector((state) => state.products.products);
-
-  const filteredProducts = selectedCategory
+  let filteredProducts = []
+  const selectedCategory = useSelector((state)=>state.products.selectedCategory) 
+   if(selectedCategory == "All"){
+    filteredProducts = product_data
+   }
+   else{
+     filteredProducts = selectedCategory
     ? product_data.filter((product) => product.category === selectedCategory)
     : product_data;
+   }
+  
 
   return (
     <Container>
@@ -76,9 +83,6 @@ const Product_card = ({ selectedCategory }) => {
                   BUY NOW
                 </Button>
                 </Link>
-                <Button variant="contained" size="small" color="secondary">
-                  Add to Cart
-                </Button>
               </CardActions>
             </Card>
          

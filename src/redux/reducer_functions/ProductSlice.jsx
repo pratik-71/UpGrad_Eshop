@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     products: [],
     categories:[],
+    selectedCategory:"All",
     filterProduct : []
   };
 let oldProductData = []  
@@ -17,6 +18,9 @@ let oldProductData = []
       },
       setCategories:(state,action)=>{
         state.categories = action.payload
+      },
+      setSelectedCategory: (state, action) => {
+        state.selectedCategory = action.payload;
       },
       setPricefilterProduct:(state,action)=>{
         if (action.payload ==="LowToHigh"){
@@ -52,5 +56,5 @@ let oldProductData = []
     },
   });
 
-  export const { setProducts,setCategories,setPricefilterProduct,setTimeFilterProduct } = ProductSlice.actions
+  export const { setProducts,setCategories,setPricefilterProduct,setTimeFilterProduct,setSelectedCategory } = ProductSlice.actions
   export default ProductSlice.reducer;

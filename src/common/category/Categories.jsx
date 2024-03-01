@@ -4,10 +4,13 @@ import { setCategories, setSelectedCategory } from '../../redux/reducer_function
 import { Box, Divider, Tab, Tabs } from '@mui/material';
 
 const Categories = () => {
+
     const categories = useSelector((state) => state.products.categories);
     const [value, setValue] = useState(0); 
     const dispatch = useDispatch();
 
+
+      // Select category from category section
     const handleChange = (event, newValue) => {
         setValue(newValue);
         const Index = newValue === 0 ? "" : categories[newValue - 1];
@@ -18,9 +21,11 @@ const Categories = () => {
         fetchData();
     }, []); 
 
+
+
+    // Fetch categories from backend 
     const fetchData = async () => {
         try {
-            console.log("working on it ..................");
             const response = await fetch("http://localhost:3001/api/v1/products/categories", {
                 method: "GET",
                 headers: {
@@ -39,7 +44,10 @@ const Categories = () => {
     };
 
     return (
+
+        
         <div>
+            {/* --------------------------- Category tab - START -------------------- */}
             <Box
                 sx={{
                     width: "100%",
@@ -51,6 +59,7 @@ const Categories = () => {
                     zIndex: 1,
                 }}
             >
+
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -65,6 +74,8 @@ const Categories = () => {
                 </Tabs>
             </Box>
             <Divider />
+             {/* --------------------------- Category tab - ENDS -------------------- */}
+
         </div>
     );
 };

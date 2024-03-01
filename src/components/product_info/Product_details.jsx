@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "../product_info/product_info_css.css";
-import Categories from "../products/Categories";
+
 import { Container, Grid, Typography, TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import Categories from "../../common/category/Categories";
 
 
 
@@ -10,8 +11,9 @@ const Product_details = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1); 
-  const navigate = useNavigate();
 
+
+  // get the details of the product
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
@@ -38,28 +40,31 @@ const Product_details = () => {
   }, [id]);
 
 
+  // handle change in Quantity of product
   const handleQuantityChange = (event) => {
     setQuantity(event.target.value);
   };
   
-  const handleclick = () => {
-    navigate("/");
-    console.log("clocked")
-  };
-
   const handleBuyNow = () => {
     console.log(`Buying ${quantity} ${product?.name}(s)`);
   };
 
   return (
     <>
+    {/* categories section */}
     <Categories/>
  
 
+     {/* ------------------------------- Producs Details Page - START ------------------------ */}
+
       <div style={{margin:"20px"}}>
+
+        {/* ------------------------------- Name of product - START -------------------------- */}
       <Typography variant="h4" align="center" className="product-name" style={{ marginTop: '20px' }}>
           {product?.name}
         </Typography>
+        {/* ------------------------------- Name of product - ENDS -------------------------- */}
+
         <Grid
           sx={{marginTop:"5px"}}
           container
@@ -67,6 +72,8 @@ const Product_details = () => {
           spacing={4}
           className="product-details-container"
         >
+
+          {/* ------------------------- Image of product - START --------------------------- */}
           <Grid item xs={12} sm={6} md={5}>
             <img
               src={product?.imageURL}
@@ -75,6 +82,10 @@ const Product_details = () => {
               style={{ height: "450px", width: "500px", boxShadow: '4px 4px 8px grey' }}
             />
           </Grid>
+          {/* ------------------------- Image of product - ENDS --------------------------- */}
+
+
+          {/* ------------------------- description of product - START --------------------------- */}       
           <Grid item xs={12} sm={6} md={6}>
             <Typography
               variant="body1"
@@ -83,6 +94,11 @@ const Product_details = () => {
             >
               {product?.description}
             </Typography>
+
+          {/* ------------------------- escription of product - ENDS --------------------------- */}
+
+
+          {/* ----------------------- Table to display other details - START -------------------- */}
             <div style={{ marginTop: '20px' }}>
               <TableContainer component={Paper} elevation={3} style={{ boxShadow: '4px 4px 8px grey' }}>
                 <Table>
@@ -103,6 +119,10 @@ const Product_details = () => {
                 </Table>
               </TableContainer>
             </div>
+         {/* ----------------------- Table to display other details - ENDS -------------------- */}
+
+
+         {/* --------------------- Quantity inputbox - START --------------------------- */}
             <div style={{ marginTop: '20px' }}>
               <TextField
                 type="number"
@@ -117,9 +137,13 @@ const Product_details = () => {
                 Place Order
               </Button>
             </div>
+       {/* --------------------- Quantity inputbox - ENDS --------------------------- */}
+
           </Grid>
         </Grid>
       </div>
+
+       {/* ------------------------------- Producs Details Page - ENDS ------------------------ */}
     </>
   );
 };

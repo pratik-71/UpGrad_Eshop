@@ -8,6 +8,8 @@ const Drawer_filter = () => {
   const [selectedPriceOption, setSelectedPriceOption] = useState(null);
   const [selectAvailability,setSelectedAvailability] = useState(null);
 
+  // ------------------------------------ handle checkbox select - START ----------------------------
+  // for price checkbox 
   const handlePriceCheckboxChange = (option) => {
     setSelectedPriceOption(option);
     if(option=="LowToHigh"){
@@ -20,6 +22,8 @@ const Drawer_filter = () => {
       dispatch(setPricefilterProduct("Default"))
     }
   };
+
+  // for arrival checkbox
   const handleArrivalCheckboxChange = (option) => {
     setSelectedAvailability(option);
     if(option==="Newest"){
@@ -32,8 +36,12 @@ const Drawer_filter = () => {
       dispatch(setTimeFilterProduct("All Time"))
     }
   };
+   // ------------------------------------ handle checkbox select - ENDS ----------------------------
 
   return (
+    <>
+
+    {/* ---------------------------- Drawer body - START ----------------------------- */}
     <Container style={{ marginTop: '20px' }}>
       <Grid
         container
@@ -41,13 +49,20 @@ const Drawer_filter = () => {
         justifyContent="center"
         alignItems="center"
       >
+
+
+        {/* ---------------------- filter product option - START -------------------------- */}
         <Grid sx={{marginBottom:"20px"}}>
           <h3>Filter Products</h3>
           <Divider sx={{marginTop:"8px"}}/>
         </Grid>
+
+        {/* ---------------------- filter price options - START ----------------------------- */}
         <Grid sx={{marginTop:"20px"}}>
           <h5>Price</h5>
           <FormGroup>
+
+          {/* for Deafult oder of products */}
           <FormControlLabel
               control={
                 <Checkbox
@@ -57,6 +72,8 @@ const Drawer_filter = () => {
               }
               label="Default"
             />
+
+            {/* for Low to HIGH order */}
             <FormControlLabel
               control={
                 <Checkbox
@@ -66,6 +83,8 @@ const Drawer_filter = () => {
               }
               label="Low to High"
             />
+
+            {/* for high to low order */}
             <FormControlLabel
               control={
                 <Checkbox
@@ -77,9 +96,15 @@ const Drawer_filter = () => {
             />
           </FormGroup>
         </Grid>
+        {/* ---------------------- filter price options - ENDS ----------------------------- */}
+
+        
+        {/* ---------------------- filter Availability options - START ----------------------------- */}
         <Grid sx={{marginTop:"20px"}}>
           <h5>Availability</h5>
           <FormGroup>
+
+            {/* for newster product first order */}
             <FormControlLabel
               control={
                 <Checkbox
@@ -89,6 +114,8 @@ const Drawer_filter = () => {
               }
               label="New Arrivals"
             />
+
+            {/* for older items firts order */}
             <FormControlLabel
               control={
                 <Checkbox
@@ -98,6 +125,8 @@ const Drawer_filter = () => {
               }
               label="Old Stock"
             />
+
+            {/* for random order */}
             <FormControlLabel
               control={
                 <Checkbox
@@ -108,9 +137,14 @@ const Drawer_filter = () => {
               label="All Time"
             />
           </FormGroup>
+           {/* ---------------------- filter availabiltiy option - ENDS -------------------------- */}
+
+
         </Grid>
       </Grid>
     </Container>
+      {/* ---------------------------- Drawer body - ENDS ----------------------------- */}
+    </>
   );
 };
 

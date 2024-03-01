@@ -65,14 +65,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 const Navbar = (props) => {
-
+  // for buttons inside navbar
   const [navlinks, setNavLinks] = React.useState(pages);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
 
-
+  // check is user role 
    const isAuthenticated = useSelector((state)=>state.auth.isAuthenticated)
    const isAdmin = useSelector((state)=>state.auth.isAdmin)
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -84,7 +85,10 @@ const Navbar = (props) => {
 
   return (
     <>
-<AppBar position="static" style={{ zIndex: 100 }}>
+
+              {/* -------------------- Shooping logo and name - START ----------------------*/}
+
+    <AppBar position="static" style={{ zIndex: 100 }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters style={{zIndex:100}}>
             <ShoppingCartIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -104,8 +108,12 @@ const Navbar = (props) => {
               upGrad Eshop
             </Typography>
 
+          {/* -------------------- Shooping logo and name - ENDS ----------------------*/}
+              
 
 
+
+           {/* -------------------- Search feild in navbar - STARTS --------------------- */}
             <Box
               sx={{
                 flexGrow: 1,
@@ -119,10 +127,11 @@ const Navbar = (props) => {
               <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
             </Search>
             </Box>
+             {/* -------------------- Search feild in navbar - ENDS --------------------- */}
 
 
 
-
+            {/* ------------------ Responsive Navbar - START -------------------  */}
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
@@ -136,10 +145,7 @@ const Navbar = (props) => {
                 <MenuIcon />
               </IconButton>
 
-
-
-
-
+             {/*------------------ Content inside toggle button - START ----------- */}
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorElNav}
@@ -185,13 +191,14 @@ const Navbar = (props) => {
                 ))}
 
               </Menu>
-
-
-
-
-
-
+              {/*------------------ Content inside toggle button - ENDS ----------- */}
             </Box>
+             {/* ------------------ Responsive Navbar - ENDS -------------------  */}
+
+
+
+
+             {/* ------------------- Medium and large screen navbar - START ---------------- */}
 
             <ShoppingCartIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
             <Typography
@@ -210,6 +217,8 @@ const Navbar = (props) => {
             >
               upGrad Eshop
             </Typography>
+            
+            {/* ------------ Conditional redering of buttons for ADMIN and USER - START --------- */}
 
             <Box
               sx={{
@@ -286,10 +295,13 @@ const Navbar = (props) => {
     
                 ))
               )}
+              {/* ------------ Conditional redering of buttons for ADMIN and USER - ENDS --------- */}
             </Box>
+            {/* ------------------- Medium and large screen navbar - ENDS ---------------- */}
           </Toolbar>
         </Container>
       </AppBar>
+      
     </>
   );
 };

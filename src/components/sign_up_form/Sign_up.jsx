@@ -238,7 +238,8 @@ export default function Sign_up() {
 
           {/* --------------------------- sign up form ends ----------------------------- */}
 
-
+         
+         {/* ---------------------------- Display error messege here ------------------ */}
         <p style={{ fontSize: "14px", color: "red", textAlign: "center" }}>
           {errorMessage}
         </p>

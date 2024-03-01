@@ -18,7 +18,9 @@ const Product_card = () => {
    useEffect(()=>{
       get_product()
    },[])
+  
 
+   // get products data from backend
    const get_product = async () => {
     const response = await fetch(`http://localhost:3001/api/v1/products`, {
       method: "GET",
@@ -34,8 +36,13 @@ const Product_card = () => {
     dispatch(setProducts(data));
   };
 
+
+
   const product_data = useSelector((state) => state.products.products);
   let filteredProducts = []
+
+
+  // to filter product accrding to option choosen from Drawer
   const selectedCategory = useSelector((state)=>state.products.selectedCategory) 
    if(selectedCategory == "All"){
     filteredProducts = product_data
@@ -48,16 +55,26 @@ const Product_card = () => {
   
 
   return (
+    <>
+
+    {/* ------------------------------ Cards main body - START -------------------------------- */}
     <Container>
      <Box sx={{ display: "flex", justifyContent: "space-evenly", flexWrap: "wrap", margin: "30px" }}>
+
+
+       {/* ---------------------------- product mapping - START -------------------------------- */}
         {filteredProducts.map((card) => (
-        
+             
+
+            //  ----------------------- cards body - START ---------------------------------
             <Card
               key={card.id}
               sx={{ maxWidth: 345, width: 300, borderRadius: "15px", boxShadow: 4 }}
               style={{ margin: "20px", marginBottom: "30px", height: "420px" }}
             >
               <CardActionArea>
+
+                {/* ------------------------- Cards image - START ------------------------ */}
                 <CardMedia
                   component="img"
                   height="200" 
@@ -65,6 +82,10 @@ const Product_card = () => {
                   alt={card.name} 
                   style={{ borderTopLeftRadius: "15px", borderTopRightRadius: "15px"}}
                 />
+                 {/* ------------------------- Cards image - ENDS ------------------------ */}
+
+
+                 {/* -------------------------- Cards info - STARTS ------------------------ */}
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div" align="center" style={{ maxHeight: "35px", overflow: "hidden" }}>
                     {card.name}
@@ -76,7 +97,11 @@ const Product_card = () => {
                     {card.price} Rs
                   </Typography>
                 </CardContent>
+                {/* -------------------------- Cards info - ENDS ------------------------ */}
+
               </CardActionArea>
+
+              {/* --------------------------- Cards Button - START --------------------------- */}
               <CardActions sx={{ display: "flex", justifyContent: "center" }}>
                 <Link to={`/product_details/${card._id}`}>
                 <Button variant="contained" size="small" color="primary">
@@ -84,11 +109,19 @@ const Product_card = () => {
                 </Button>
                 </Link>
               </CardActions>
+               {/* --------------------------- Cards Button - ENDS --------------------------- */}
             </Card>
+            //  ----------------------- cards body - ENDS ---------------------------------
          
         ))}
+        {/* ---------------------------- product mapping - ENDS -------------------------------- */}
+
+
      </Box>
     </Container>
+     {/* ------------------------------ Cards main body - ENDS -------------------------------- */}
+    </>
+    
   );
 };
 

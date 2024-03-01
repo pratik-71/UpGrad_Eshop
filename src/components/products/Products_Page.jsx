@@ -10,23 +10,29 @@ import {
 import Product_card from "./Product_card";
 import Drawer_filter from "./Drawer_filter";
 import { Divider, Grid } from "@mui/material";
-import Categories from "./Categories";
+import Categories from "../../common/category/Categories";
 
 const Products_Page = () => {
-  
   return (
     <>
-      <Categories/>
-     <Grid container spacing={2}>
-          <Grid xs={2}>
-              <Drawer_filter/>
-            
-          </Grid>
-            <Divider orientation="vertical" flexItem />
-          <Grid>
-          <Product_card/>
-          </Grid>
-     </Grid>
+      {/*  -------------------- This is skeleton to display product page - START ------------------ */}
+      {/* show category tab */}
+      <Categories />
+
+      <Grid container spacing={2}>
+        <Grid xs={2}>
+          {/* to display product filer  */}
+          <Drawer_filter />
+        </Grid>
+
+        <Divider orientation="vertical" flexItem />
+
+        <Grid>
+          {/* display product cards  */}
+          <Product_card />
+        </Grid>
+      </Grid>
+      {/*  -------------------- This is skeleton to display product page - ENDS ------------------ */}
     </>
   );
 };

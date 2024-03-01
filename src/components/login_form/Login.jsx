@@ -26,6 +26,9 @@ export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
 
+
+
+  // send user email and password to bckend for authentication
   const send_data = async (formData) => {
     try {
       const response = await fetch("http://localhost:3001/api/v1/auth", {
@@ -49,14 +52,20 @@ export default function Login() {
       }
 
       const responsedata = await response.json();
+
+      // check is user authenticatied is true from response send by backend
       if (responsedata.isAuthenticated) {
+        // get and save AUTH token from resonse header to localstorage
         const token = response.headers.get("X-Auth-Token");
         localStorage.setItem('Auth-Token', token);
+
+        // check if AUTH-TOKEN endswith this values then  user is admin
         if (token.endsWith("1@3456Qw-")) {
           dispatch(setisAdmin(true));
         }
         dispatch(setisAuthenticated(true));
         navigate('/');
+
       } else {
         console.log("User is not authenticated");
       }
@@ -67,6 +76,9 @@ export default function Login() {
   }
 
   return (
+    <>
+    {/* ------------------------------- Login form - START ------------------------------------ */}
+
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -78,13 +90,21 @@ export default function Login() {
             alignItems: 'center',
           }}
         >
+          {/* Lock image on tap of form */}
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
+
+
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+
+          {/* --------------------------- Input Feilds - START --------------------------- */}
+
           <Box component="form" onSubmit={handleSubmit(send_data)} noValidate sx={{ mt: 1 }}>
+
+            {/* Email inputbox */}
             <TextField
               type="email"
               required
@@ -100,6 +120,9 @@ export default function Login() {
               error={!!errors?.email}
               helperText={errors?.email && errors.email.message}
             />
+
+
+            {/* passowrd inputbox */}
             <TextField
               type="password"
               margin="normal"
@@ -114,6 +137,9 @@ export default function Login() {
               error={!!errors?.password}
               helperText={errors?.password && errors.password.message}
             />
+
+
+            {/* Sign In button */}
             <Button
               type="submit"
               fullWidth
@@ -122,6 +148,9 @@ export default function Login() {
             >
               Sign In
             </Button>
+
+
+            {/* link to sign up if user is new to website */}
             <Grid container justifyContent="center">
               <Grid item>
                 <Link href="/Sign_up" variant="body2" style={{ color: 'black' }}>
@@ -131,11 +160,19 @@ export default function Login() {
               </Grid>
             </Grid>
           </Box>
+
+           {/* --------------------------- Input Feilds - ENDS --------------------------- */}
+
         </Box>
+
+
+        {/* ---------------------- Dispaly Error messege - START ------------------------ */}
         <p style={{ fontSize: "14px", color: "red", textAlign: "center" }}>
           {errorMessage}
         </p>
+         {/* ---------------------- Dispaly Error messege - ENDS ------------------------ */}
       </Container>
     </ThemeProvider>
+    </>
   );
 }

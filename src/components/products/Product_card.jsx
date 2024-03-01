@@ -9,7 +9,7 @@ import { CardActionArea } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../../redux/reducer_functions/ProductSlice";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 const Product_card = () => {
    
@@ -103,7 +103,7 @@ const Product_card = () => {
 
               {/* --------------------------- Cards Button - START --------------------------- */}
               <CardActions sx={{ display: "flex", justifyContent: "center" }}>
-                <Link to={`/product_details/${card._id}`}>
+                <Link to={`Product_details/${card._id}`}>
                 <Button variant="contained" size="small" color="primary">
                   BUY NOW
                 </Button>
@@ -120,6 +120,7 @@ const Product_card = () => {
      </Box>
     </Container>
      {/* ------------------------------ Cards main body - ENDS -------------------------------- */}
+
     </>
     
   );

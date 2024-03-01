@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import "../product_info/product_info_css.css";
 
 import { Container, Grid, Typography, TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import Categories from "../../common/category/Categories";
+import { useDispatch } from "react-redux";
+import { setBuyProduct } from "../../redux/reducer_functions/ProductSlice";
 
 
 
@@ -11,6 +13,8 @@ const Product_details = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1); 
+  const dispatch = useDispatch()
+  const navigate = useNavigate() 
 
 
   // get the details of the product
@@ -45,10 +49,12 @@ const Product_details = () => {
     setQuantity(event.target.value);
   };
   
-  const handleBuyNow = () => {
-    console.log(`Buying ${quantity} ${product?.name}(s)`);
-  };
 
+  // upfate buy product on redux with quantity
+  const handlebuy =()=>{
+    dispatch(setBuyProduct({ ...product, quantity }));
+    navigate("/order");
+  }
   return (
     <>
     {/* categories section */}
@@ -133,9 +139,11 @@ const Product_details = () => {
                 inputProps={{ min: 1 }}
                 style={{ width: '150px', marginRight: '20px' }}
               />
-              <Button variant="contained" color="primary" onClick={handleBuyNow}>
+             
+              <Button variant="contained" color="primary" onClick={handlebuy}>
                 Place Order
               </Button>
+             
             </div>
        {/* --------------------- Quantity inputbox - ENDS --------------------------- */}
 
@@ -144,6 +152,7 @@ const Product_details = () => {
       </div>
 
        {/* ------------------------------- Producs Details Page - ENDS ------------------------ */}
+    
     </>
   );
 };

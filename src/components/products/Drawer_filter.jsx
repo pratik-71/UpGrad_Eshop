@@ -114,28 +114,7 @@ const Drawer_filter = () => {
               }
               label="New Arrivals"
             />
-
-            {/* for older items firts order */}
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={selectAvailability === "Old"}
-                  onChange={() => handleArrivalCheckboxChange("Old")}
-                />
-              }
-              label="Old Stock"
-            />
-
-            {/* for random order */}
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={selectAvailability === "All Time"}
-                  onChange={() => handleArrivalCheckboxChange("All Time")}
-                />
-              }
-              label="All Time"
-            />
+         
           </FormGroup>
            {/* ---------------------- filter availabiltiy option - ENDS -------------------------- */}
 

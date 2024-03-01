@@ -11,6 +11,7 @@ import Product_card from "./Product_card";
 import Drawer_filter from "./Drawer_filter";
 import { Divider, Grid } from "@mui/material";
 import Categories from "../../common/category/Categories";
+import { Outlet } from "react-router-dom";
 
 const Products_Page = () => {
   return (
@@ -33,6 +34,8 @@ const Products_Page = () => {
         </Grid>
       </Grid>
       {/*  -------------------- This is skeleton to display product page - ENDS ------------------ */}
+
+    
     </>
   );
 };

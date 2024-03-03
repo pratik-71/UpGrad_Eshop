@@ -57,8 +57,6 @@ const Product_details = () => {
   }
   return (
     <>
-    {/* categories section */}
-    <Categories/>
  
 
      {/* ------------------------------- Producs Details Page - START ------------------------ */}
@@ -72,7 +70,7 @@ const Product_details = () => {
         {/* ------------------------------- Name of product - ENDS -------------------------- */}
 
         <Grid
-          sx={{marginTop:"5px"}}
+          sx={{marginTop:"2px"}}
           container
           align="center"
           spacing={4}
@@ -126,6 +124,21 @@ const Product_details = () => {
               </TableContainer>
             </div>
          {/* ----------------------- Table to display other details - ENDS -------------------- */}
+
+
+          {/* ------------------------- description of product - START --------------------------- */}       
+
+            <Typography
+              sx={{marginTop:"30px"}}
+              variant="body1"
+              align="center"
+              className="product-description"
+            >
+              <h3>Price : {product?.price} Rs.</h3>
+            </Typography>
+
+          {/* ------------------------- escription of product - ENDS --------------------------- */}
+
 
 
          {/* --------------------- Quantity inputbox - START --------------------------- */}

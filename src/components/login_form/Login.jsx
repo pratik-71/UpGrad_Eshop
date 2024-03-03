@@ -28,8 +28,9 @@ export default function Login() {
 
 
 
-  // send user email and password to bckend for authentication
+  
   const send_data = async (formData) => {
+   
     try {
       const response = await fetch("http://localhost:3001/api/v1/auth", {
         method: "POST",
@@ -60,9 +61,9 @@ export default function Login() {
         localStorage.setItem('Auth-Token', token);
 
         // check if AUTH-TOKEN endswith this values then  user is admin
-        if (token.endsWith("1@3456Qw-")) {
+        // if (token.endsWith("1@3456Qw-")) {
           dispatch(setisAdmin(true));
-        }
+        //}
         dispatch(setisAuthenticated(true));
         navigate('/');
 

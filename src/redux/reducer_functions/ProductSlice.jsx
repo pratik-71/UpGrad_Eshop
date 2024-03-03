@@ -6,7 +6,8 @@ const initialState = {
     categories: [],
     selectedCategory: "All",
     filterProduct: [],
-    buy_product: null // Changed to hold just one product object
+    buy_product: null,
+    modification_product : null,
 };
 
 // Store old default data
@@ -21,6 +22,10 @@ const ProductSlice = createSlice({
         setProducts: (state, action) => {
             state.products = action.payload;
             oldProductData = action.payload;
+        },
+         
+        setModificationProduct : (state,action) => {
+           state.modification_product = action.payload
         },
 
         // Update buy_product
@@ -64,5 +69,5 @@ const ProductSlice = createSlice({
     },
 });
 
-export const { setProducts, setBuyProduct, setCategories, setPricefilterProduct, setTimeFilterProduct, setSelectedCategory } = ProductSlice.actions;
+export const { setProducts,setModificationProduct, setBuyProduct, setCategories, setPricefilterProduct, setTimeFilterProduct, setSelectedCategory } = ProductSlice.actions;
 export default ProductSlice.reducer;

@@ -219,6 +219,7 @@ export default function Sign_up() {
 
                                             {/* Sign up Button */}
             <Button
+            href="/sign_in"
               type="submit"
               fullWidth
               variant="contained"

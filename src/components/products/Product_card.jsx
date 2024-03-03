@@ -8,16 +8,35 @@ import { Box, Button, CardActions, Container } from "@mui/material";
 import { CardActionArea } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "../../redux/reducer_functions/ProductSlice";
-import { Link, Outlet } from "react-router-dom";
+import { setModificationProduct, setProducts } from "../../redux/reducer_functions/ProductSlice";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const Product_card = () => {
    
   const dispatch = useDispatch()
-   
+  const navigate = useNavigate()
+
+   // functio to delete product
+   const handle_delete = async(data) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/v1/products/${data._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error", error.message);
+    }
+  };
+
+
    useEffect(()=>{
       get_product()
-   },[])
+   },[handle_delete])
   
 
    // get products data from backend
@@ -37,8 +56,21 @@ const Product_card = () => {
   };
 
 
+  // function to modify product data
+  const handle_modify = (product_data) => {
+    dispatch(setModificationProduct(product_data))
+    navigate("/modify_product")
+    console.log(product_data)
+  }
+
+  
+ 
+  
+
+
 
   const product_data = useSelector((state) => state.products.products);
+  const isAdmin = useSelector((state)=>state.auth.isAdmin)
   let filteredProducts = []
 
 
@@ -108,6 +140,24 @@ const Product_card = () => {
                   BUY NOW
                 </Button>
                 </Link>
+               {
+                isAdmin &&(
+                  <>
+
+                 {/* --------------------- delete modify buttons for admin - START -------------- */}
+                <Button variant="contained" onClick={()=>handle_delete(card)} size="small" color="primary">
+                  Delete
+                </Button>
+              
+               
+                <Button  variant="contained" size="small" color="primary" onClick={()=>handle_modify(card)}>
+                  Modify
+                </Button>
+                {/* --------------------- delete modify buttons for admin - END -------------- */}
+                  </>
+                 
+                )
+               }
               </CardActions>
                {/* --------------------------- Cards Button - ENDS --------------------------- */}
             </Card>
@@ -118,6 +168,8 @@ const Product_card = () => {
 
 
      </Box>
+
+     
     </Container>
      {/* ------------------------------ Cards main body - ENDS -------------------------------- */}
 

@@ -1,51 +1,74 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Address from './Address';
-import Display_order from './Display_order';
-import Confirm_order from './Confirm_order';
+// OrderSkeleton.js
 
-const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+import React, { useState } from "react";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
+import Address from "./Address";
+import Display_order from "./Display_order";
+import { Container } from "@mui/material";
+import Confirmed_order from "./Confirmed_order";
+
+const steps = [
+  "Review order",
+  "Give addresss",
+  "Confirmed order",
+];
 
 const OrderSkeleton = () => {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+  const [completed, setCompleted] = useState(new Set());
 
   const handleStep = (step) => () => {
     setActiveStep(step);
   };
 
+  const handlePlaceOrder = () => {
+    const newCompleted = new Set(completed);
+    newCompleted.add(activeStep);
+    setCompleted(newCompleted);
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
   const getStepContent = (step) => {
     switch (step) {
       case 0:
-        return <Display_order />;
+        return <Display_order onNext={handlePlaceOrder} />;
       case 1:
-        return <Address />;
+        return <Address onNext={handlePlaceOrder} />; 
       case 2:
-        return <Confirm_order />;
+        return <Confirmed_order/>;
       default:
         return null;
     }
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2 }}>
-        {getStepContent(activeStep)}
+    <Container>
+      <Box sx={{ width: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: 3,
+          }}
+        >
+          {getStepContent(activeStep)}
+        </Box>
+        <Stepper nonLinear activeStep={activeStep} sx={{ mt: 2 }}>
+          {steps.map((label, index) => (
+            <Step key={label} completed={completed.has(index)}>
+              <StepButton color="inherit" onClick={handleStep(index)}>
+                {label}
+              </StepButton>
+            </Step>
+          ))}
+        </Stepper>
       </Box>
-      <Stepper nonLinear activeStep={activeStep} sx={{ mt: 2 }}>
-        {steps.map((label, index) => (
-          <Step key={label}>
-            <StepButton color="inherit" onClick={handleStep(index)}>
-              {label}
-            </StepButton>
-          </Step>
-        ))}
-      </Stepper>
-    </Box>
+    </Container>
   );
 };
 

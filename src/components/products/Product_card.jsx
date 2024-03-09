@@ -15,6 +15,8 @@ const Product_card = () => {
    
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const product_data = useSelector((state) => state.products.products);
+  const isAdmin = useSelector((state)=>state.auth.isAdmin)
 
    // functio to delete product
    const handle_delete = async(data) => {
@@ -32,11 +34,6 @@ const Product_card = () => {
       console.error("Error", error.message);
     }
   };
-
-
-   useEffect(()=>{
-      get_product()
-   },[])
   
 
    // get products data from backend
@@ -53,6 +50,7 @@ const Product_card = () => {
     }
     const data = await response.json();
     dispatch(setProducts(data));
+    
   };
 
 
@@ -63,14 +61,9 @@ const Product_card = () => {
     console.log(product_data)
   }
 
+
+
   
- 
-  
-
-
-
-  const product_data = useSelector((state) => state.products.products);
-  const isAdmin = useSelector((state)=>state.auth.isAdmin)
   let filteredProducts = []
 
 
@@ -84,7 +77,11 @@ const Product_card = () => {
     ? product_data.filter((product) => product.category === selectedCategory)
     : product_data;
    }
-  
+
+
+   useEffect(()=>{
+    get_product()
+ },[])
 
   return (
     <>
@@ -140,24 +137,23 @@ const Product_card = () => {
                   BUY NOW
                 </Button>
                 </Link>
-               {
-                isAdmin &&(
-                  <>
+               
+                {/* {
+              isAdmin &&(
+                <> */}
 
                  {/* --------------------- delete modify buttons for admin - START -------------- */}
                 <Button variant="contained" onClick={()=>handle_delete(card)} size="small" color="primary">
                   Delete
                 </Button>
-              
-               
                 <Button  variant="contained" size="small" color="primary" onClick={()=>handle_modify(card)}>
                   Modify
                 </Button>
                 {/* --------------------- delete modify buttons for admin - END -------------- */}
-                  </>
+                  {/* </>
                  
                 )
-               }
+               } */}
               </CardActions>
                {/* --------------------------- Cards Button - ENDS --------------------------- */}
             </Card>

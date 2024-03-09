@@ -52,7 +52,7 @@ const Success = () => {
     <Grid item xs={4} sm={4} sx={{ textAlign: "center" }}>
         {
             success && (
-                <h1>"Order placed successfully!</h1>
+                <h1>Order placed successfully!</h1>
             )
         }
           <Link to="/">

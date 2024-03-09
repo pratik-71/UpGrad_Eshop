@@ -3,41 +3,60 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import "../products/Products.css";
-import { Box, Button, CardActions, Container } from "@mui/material";
+import { Box, Button, CardActions, Container, Modal } from "@mui/material";
 import { CardActionArea } from "@mui/material";
-
 import { useDispatch, useSelector } from "react-redux";
 import { setModificationProduct, setProducts } from "../../redux/reducer_functions/ProductSlice";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const Product_card = () => {
-   
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+const ProductCard = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const product_data = useSelector((state) => state.products.products);
-  const isAdmin = useSelector((state)=>state.auth.isAdmin)
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
 
-   // functio to delete product
-   const handle_delete = async(data) => {
+  const [open, setOpen] = React.useState(false);
+  const [deleteData, setDeleteData] = React.useState(null);
+
+  const handleOpen = (card) => {
+    setDeleteData(card);
+    setOpen(true);
+  };
+
+  const handleClose = () => setOpen(false);
+
+
+  // to delete product 
+  const handleDelete = async (card) => {
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/v1/products/${data._id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:3001/api/v1/products/${card._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      handleClose();
+      getProducts(); 
     } catch (error) {
       console.error("Error", error.message);
     }
   };
-  
 
-   // get products data from backend
-   const get_product = async () => {
+  
+  //receive product data
+  const getProducts = async () => {
     const response = await fetch(`http://localhost:3001/api/v1/products`, {
       method: "GET",
       headers: {
@@ -50,128 +69,118 @@ const Product_card = () => {
     }
     const data = await response.json();
     dispatch(setProducts(data));
-    
   };
 
 
-  // function to modify product data
-  const handle_modify = (product_data) => {
-    dispatch(setModificationProduct(product_data))
-    navigate("/modify_product")
-    console.log(product_data)
+  // edit poduct data
+  const handleModify = (product_data) => {
+    dispatch(setModificationProduct(product_data));
+    navigate("/modify_product");
+  };
+
+
+  // filter product according to category
+  const selectedCategory = useSelector((state) => state.products.selectedCategory);
+  let filteredProducts = [];
+  if (selectedCategory === "All") {
+    filteredProducts = product_data;
+  } else {
+    filteredProducts = selectedCategory
+      ? product_data.filter((product) => product.category === selectedCategory)
+      : product_data;
   }
 
-
-
-  
-  let filteredProducts = []
-
-
-  // to filter product accrding to option choosen from Drawer
-  const selectedCategory = useSelector((state)=>state.products.selectedCategory) 
-   if(selectedCategory == "All"){
-    filteredProducts = product_data
-   }
-   else{
-     filteredProducts = selectedCategory
-    ? product_data.filter((product) => product.category === selectedCategory)
-    : product_data;
-   }
-
-
-   useEffect(()=>{
-    get_product()
- },[])
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <>
-
-    {/* ------------------------------ Cards main body - START -------------------------------- */}
-    <Container>
-     <Box sx={{ display: "flex", justifyContent: "space-evenly", flexWrap: "wrap", margin: "30px" }}>
+      <Container>
 
 
-       {/* ---------------------------- product mapping - START -------------------------------- */}
-        {filteredProducts.map((card) => (
-             
-
-            //  ----------------------- cards body - START ---------------------------------
+        {/* -------------------------------- Product card - START -------------------------- */}
+        <Box sx={{ display: "flex", justifyContent: "space-evenly", flexWrap: "wrap", margin: "30px" }}>
+          {filteredProducts.map((card) => (
             <Card
               key={card.id}
               sx={{ maxWidth: 345, width: 300, borderRadius: "15px", boxShadow: 4 }}
               style={{ margin: "20px", marginBottom: "30px", height: "420px" }}
             >
-              <CardActionArea>
 
-                {/* ------------------------- Cards image - START ------------------------ */}
+             {/* -------------------------------- Product card body - START -------------------------- */}
+              <CardActionArea>
                 <CardMedia
                   component="img"
-                  height="200" 
+                  height="200"
                   image={card.imageURL}
-                  alt={card.name} 
-                  style={{ borderTopLeftRadius: "15px", borderTopRightRadius: "15px"}}
+                  alt={card.name}
+                  style={{ borderTopLeftRadius: "15px", borderTopRightRadius: "15px" }}
                 />
-                 {/* ------------------------- Cards image - ENDS ------------------------ */}
-
-
-                 {/* -------------------------- Cards info - STARTS ------------------------ */}
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div" align="center" style={{ maxHeight: "35px", overflow: "hidden" }}>
                     {card.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" align="center" style={{ height:"40px", maxHeight: "40px", overflow: "hidden" }}>
+                  <Typography variant="body2" color="text.secondary" align="center" style={{ height: "40px", maxHeight: "40px", overflow: "hidden" }}>
                     {card.description}
                   </Typography>
                   <Typography variant="h6" align="center" mt={2}>
                     {card.price} Rs
                   </Typography>
                 </CardContent>
-                {/* -------------------------- Cards info - ENDS ------------------------ */}
-
               </CardActionArea>
-
-              {/* --------------------------- Cards Button - START --------------------------- */}
               <CardActions sx={{ display: "flex", justifyContent: "center" }}>
                 <Link to={`Product_details/${card._id}`}>
-                <Button variant="contained" size="small" color="primary">
-                  BUY NOW
-                </Button>
+                  <Button variant="contained" size="small" color="primary">
+                    BUY NOW
+                  </Button>
                 </Link>
-               
-                {/* {
-              isAdmin &&(
-                <> */}
-
-                 {/* --------------------- delete modify buttons for admin - START -------------- */}
-                <Button variant="contained" onClick={()=>handle_delete(card)} size="small" color="primary">
-                  Delete
-                </Button>
-                <Button  variant="contained" size="small" color="primary" onClick={()=>handle_modify(card)}>
-                  Modify
-                </Button>
-                {/* --------------------- delete modify buttons for admin - END -------------- */}
-                  {/* </>
-                 
-                )
-               } */}
+                {isAdmin && (
+                  <>
+                    <Button variant="contained" onClick={() => handleOpen(card)} size="small" color="primary">
+                      Delete
+                    </Button>
+                    <Button variant="contained" size="small" color="primary" onClick={() => handleModify(card)}>
+                      Modify
+                    </Button>
+                  </>
+                )}
               </CardActions>
-               {/* --------------------------- Cards Button - ENDS --------------------------- */}
+             {/* -------------------------------- Product card body - ENDS -------------------------- */}  
             </Card>
-            //  ----------------------- cards body - ENDS ---------------------------------
-         
-        ))}
-        {/* ---------------------------- product mapping - ENDS -------------------------------- */}
+          ))}
+        </Box>
+      {/* -------------------------------- Product card - START -------------------------- */}
 
 
-     </Box>
 
-     
-    </Container>
-     {/* ------------------------------ Cards main body - ENDS -------------------------------- */}
+      {/* ---------------------------- delete modal - START ------------------------------ */}
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography align="center" id="modal-modal-title" variant="h6" component="h2">
+              Are you sure you want to delete product
+            </Typography>
+            <Box sx={{display:"flex",justifyContent:"space-between",margin:"10px"}}>
 
+            <Button sx={{backgroundColor:"yellow",color:"black"}} variant="contained" onClick={handleClose} size="small" color="primary">
+              Cancel
+            </Button>
+            <Button sx={{backgroundColor:"red"}} variant="contained" onClick={() => handleDelete(deleteData)} size="small" color="primary">
+              Delete
+            </Button>
+            </Box>
+          </Box>
+        </Modal>
+
+      {/* ---------------------------- delete modal - ENDS ------------------------------ */}  
+      </Container>
     </>
-    
   );
 };
 
-export default Product_card;
+export default ProductCard;

@@ -10,7 +10,8 @@ const Drawer_filter = () => {
 
   // ------------------------------------ handle checkbox select - START ----------------------------
   // for price checkbox 
-  const handlePriceCheckboxChange = (option) => {
+  const handlePriceCheckboxChange = (e,option) => {
+    e.preventDefault()
     setSelectedPriceOption(option);
     if(option=="LowToHigh"){
         dispatch(setPricefilterProduct("LowToHigh"))
@@ -24,7 +25,8 @@ const Drawer_filter = () => {
   };
 
   // for arrival checkbox
-  const handleArrivalCheckboxChange = (option) => {
+  const handleArrivalCheckboxChange = (e,option) => {
+    e.preventDefault()
     setSelectedAvailability(option);
     if(option==="Newest"){
       dispatch(setTimeFilterProduct("Newest"))
@@ -67,7 +69,7 @@ const Drawer_filter = () => {
               control={
                 <Checkbox
                   checked={selectedPriceOption === "Default"}
-                  onChange={() => handlePriceCheckboxChange("Default")}
+                  onChange={(e) => handlePriceCheckboxChange(e,"Default")}
                 />
               }
               label="Default"
@@ -78,7 +80,7 @@ const Drawer_filter = () => {
               control={
                 <Checkbox
                   checked={selectedPriceOption === "LowToHigh"}
-                  onChange={() => handlePriceCheckboxChange("LowToHigh")}
+                  onChange={(e) => handlePriceCheckboxChange(e,"LowToHigh")}
                 />
               }
               label="Low to High"
@@ -89,7 +91,7 @@ const Drawer_filter = () => {
               control={
                 <Checkbox
                   checked={selectedPriceOption === "HighToLow"}
-                  onChange={() => handlePriceCheckboxChange("HighToLow")}
+                  onChange={(e) => handlePriceCheckboxChange(e,"HighToLow")}
                 />
               }
               label="High to Low"
@@ -109,7 +111,7 @@ const Drawer_filter = () => {
               control={
                 <Checkbox
                   checked={selectAvailability === "Newest"}
-                  onChange={() => handleArrivalCheckboxChange("Newest")}
+                  onChange={(e) => handleArrivalCheckboxChange(e,"Newest")}
                 />
               }
               label="New Arrivals"

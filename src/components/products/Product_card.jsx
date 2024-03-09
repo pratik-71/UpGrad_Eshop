@@ -36,7 +36,7 @@ const Product_card = () => {
 
    useEffect(()=>{
       get_product()
-   },[handle_delete])
+   },[])
   
 
    // get products data from backend

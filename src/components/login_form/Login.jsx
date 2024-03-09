@@ -61,9 +61,9 @@ export default function Login() {
         localStorage.setItem('Auth-Token', token);
 
         // check if AUTH-TOKEN endswith this values then  user is admin
-        // if (token.endsWith("1@3456Qw-")) {
+         if (token.endsWith("1@3456Qw-")) {
           dispatch(setisAdmin(true));
-        //}
+        }
         dispatch(setisAuthenticated(true));
         navigate('/');
 

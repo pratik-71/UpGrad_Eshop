@@ -9,6 +9,7 @@ import Confirmed_order from "./components/orders/Confirmed_order";
 import Navbar from "./common/navbar/Navbar";
 import Add_product from "./components/admin/Add_product";
 import Modify_product from "./components/admin/Modify_product";
+import Success from "./components/orders/Success";
 
 
 
@@ -29,6 +30,7 @@ function App() {
       <Route path="/confirmed" element={<Confirmed_order/>}></Route>
       <Route path="/add_product" element={<Add_product/>}></Route>
       <Route path="/modify_product" element={<Modify_product/>}></Route>
+      <Route path="/success" element={<Success/>}></Route>
       
      </Routes>
      </BrowserRouter>

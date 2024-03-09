@@ -17,44 +17,9 @@ const Confirmed_order = () => {
   const addressData = useSelector((state) => state.address.selected_address);
   console.log(addressData);
   const [errorMessage, setErrorMessage] = React.useState("");
-  const [success, setsuccess] = useState(false);
-
-  useEffect(() => {
-    order();
-  }, []);
+  
 
   // ------------------------------------ Set oder in backend - START ----------------------------
-  const order = async () => {
-    try {
-      const authToken = localStorage.getItem("Auth-Token");
-
-      const response = await fetch("http://localhost:3001/api/v1/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": authToken,
-        },
-        body: JSON.stringify({
-          product: product._id,
-          address: addressData._id,
-          quantity: product.quantity,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        setErrorMessage(errorMessage);
-        return;
-      }
-
-      if (response.ok) {
-        setsuccess(true);
-      }
-    } catch (error) {
-      console.log(error);
-      setErrorMessage("An error occurred. Please try again later.");
-    }
-  };
   // ------------------------------------ Set oder in backend - START ----------------------------
 
   return (
@@ -63,12 +28,6 @@ const Confirmed_order = () => {
 
       {/* -------------------------- render it only successful - STRAT --------------------------- */}
       <Container>
-        {success && (
-          <>
-            <Typography variant="h5" align="center" sx={{ marginTop: "10px" }}>
-            "Order placed successfully!
-            </Typography>
-
 
            {/* product addrss column */}
             <Grid
@@ -165,16 +124,14 @@ const Confirmed_order = () => {
                 </TableContainer>
               </Grid>
             </Grid>
-          </>
-        )}
 
         {/* -------------------------- render it only successful - END --------------------------- */}
 
         {/* ------------------------------- button to go back - START ----------------------------- */}
         <Grid item xs={4} sm={4} sx={{ textAlign: "center" }}>
-          <Link to="/">
+          <Link to="/success">
             <Button variant="contained" color="primary" sx={{ mt: 4 }}>
-              Shop More
+              Place order
             </Button>
           </Link>
         </Grid>

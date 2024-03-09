@@ -105,7 +105,7 @@ export default function Sign_up() {
                     minLength: {
                       value: 5,
                       message: "First Name must be at least 5 characters long",
-                    },
+                    }
                   })}
                   error={!!errors?.firstName}
                   helperText={errors?.firstName && errors.firstName.message}

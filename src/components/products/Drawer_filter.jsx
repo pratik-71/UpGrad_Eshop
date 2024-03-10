@@ -22,22 +22,11 @@ const Drawer_filter = () => {
     if(option==="Default"){
       dispatch(setPricefilterProduct("Default"))
     }
+    if(option=="Newest"){
+      dispatch(setPricefilterProduct("Newest"))
+    }
   };
 
-  // for arrival checkbox
-  const handleArrivalCheckboxChange = (e,option) => {
-    e.preventDefault()
-    setSelectedAvailability(option);
-    if(option==="Newest"){
-      dispatch(setTimeFilterProduct("Newest"))
-    }
-    if(option==="Old Stock"){
-      dispatch(setTimeFilterProduct("Old"))
-    }
-    if(option==="All Time"){
-      dispatch(setTimeFilterProduct("All Time"))
-    }
-  };
    // ------------------------------------ handle checkbox select - ENDS ----------------------------
 
   return (
@@ -61,7 +50,6 @@ const Drawer_filter = () => {
 
         {/* ---------------------- filter price options - START ----------------------------- */}
         <Grid sx={{marginTop:"20px"}}>
-          <h5>Price</h5>
           <FormGroup>
 
           {/* for Deafult oder of products */}
@@ -96,32 +84,25 @@ const Drawer_filter = () => {
               }
               label="High to Low"
             />
-          </FormGroup>
-        </Grid>
-        {/* ---------------------- filter price options - ENDS ----------------------------- */}
 
-        
-        {/* ---------------------- filter Availability options - START ----------------------------- */}
-        <Grid sx={{marginTop:"20px"}}>
-          <h5>Availability</h5>
-          <FormGroup>
-
-            {/* for newster product first order */}
-            <FormControlLabel
+<FormControlLabel
               control={
                 <Checkbox
-                  checked={selectAvailability === "Newest"}
-                  onChange={(e) => handleArrivalCheckboxChange(e,"Newest")}
+                  checked={selectedPriceOption === "Newest"}
+                  onChange={(e) => handlePriceCheckboxChange(e,"Newest")}
                 />
               }
               label="New Arrivals"
             />
-         
+
+
           </FormGroup>
-           {/* ---------------------- filter availabiltiy option - ENDS -------------------------- */}
 
 
+          
         </Grid>
+        {/* ---------------------- filter price options - ENDS ----------------------------- */}
+
       </Grid>
     </Container>
       {/* ---------------------------- Drawer body - ENDS ----------------------------- */}

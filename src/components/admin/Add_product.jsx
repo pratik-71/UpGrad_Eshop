@@ -22,6 +22,9 @@ export default function Add_product() {
   const { register, handleSubmit, formState: { errors },watch} = useForm();
 
 
+  // you have not provided admin log in and password so how can we test functionality is it working or not
+  // still i had design thses by undertsanding backend code 
+
   // ------------------------------- fetch request for Sign Up starts ---------------------------------
   const send_data = async (formData) => {
     const authToken = localStorage.getItem("Auth-Token");

@@ -53,19 +53,13 @@ const ProductSlice = createSlice({
                 state.products = hightolow_sort;
             } else if (action.payload === "Default") {
                 state.products = oldProductData;
-            } else {
-                state.products = [...state.products];
             }
-        },
-
-        // Update products according to Availability filter
-        setTimeFilterProduct: (state, action) => {
-            if (action.payload === "Newest") {
+            else if (action.payload === "Newest") {
                 state.products = [...state.products].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
             } else {
                 state.products = [...state.products];
             }
-        }
+        },
     },
 });
 

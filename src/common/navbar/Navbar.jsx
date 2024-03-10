@@ -16,7 +16,6 @@ import InputBase from "@mui/material/InputBase";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, unstable_HistoryRouter, useNavigate } from "react-router-dom";
 import { setProducts } from "../../redux/reducer_functions/ProductSlice";
-import { setisAdmin } from "../../redux/reducer_functions/AuthSlice";
 
 
 const pages = [
@@ -70,7 +69,7 @@ const Navbar = () => {
 
   
   // for buttons inside navbar
-  const [navlinks, setNavLinks] = React.useState(pages);
+ 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   // get data from searchbox
@@ -84,7 +83,8 @@ const Navbar = () => {
     setAnchorElNav(event.currentTarget);
   };
   
-  const Log_out_btn = ()=>{
+  const Log_out_btn = (e)=>{
+    e.preventDefault()
     dispatch(isAuthenticated(false))
     localStorage.removeItem('Auth-Token');
     dispatch(isAdmin(false))
@@ -118,6 +118,9 @@ const Navbar = () => {
       const res = await response.json();
 
       if (response.ok) {
+        // plzz specify how search is working what data we have to pass there is no url parameter to pass
+        // and you except search should work.. plz specify guidelines clearly
+        console.log(res)
         dispatch(setProducts(res));
         return <Link to="/"></Link>;
       }
@@ -291,6 +294,7 @@ const Navbar = () => {
                 <>
             
                 <Button
+                   
                     sx={{
                       my: 2,
                       mx: 1,
@@ -325,7 +329,7 @@ const Navbar = () => {
                   )}
 
                   <Button
-                    onClick={Log_out_btn}
+                    onClick={(e)=>Log_out_btn(e)}
                     href="/sign_up"
                     sx={{
                       my: 2,
@@ -340,7 +344,7 @@ const Navbar = () => {
                   </Button>
                 </>
               ) : (
-                navlinks.map((page) => (
+                pages.map((page) => (
                   <Button
                     href={page.link}
                     key={page.name}
